@@ -38,7 +38,7 @@ class UserControllerTest {
     @Test
     public void updateUser() throws ValidationException {
         long id = 1;
-        User user1 = controller.getUser(id);
+        User user1;
 
         User user = User.builder()
                 .id(id)
