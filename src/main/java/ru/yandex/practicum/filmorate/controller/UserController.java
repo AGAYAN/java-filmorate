@@ -15,14 +15,14 @@ import java.util.OptionalLong;
 public class UserController {
 
     private final Map<Long, User> userMap = new HashMap<>();
+
     @PostMapping
     public void addNewUser(@RequestBody User user) {
 
         try {
             if (user.getLogin().isBlank()) {
                 throw new ValidationException(log + "Логин не может быть пустым");
-            }
-            else if (user.getEmail().isBlank()) {
+            } else if (user.getEmail().isBlank()) {
                 throw new ValidationException(log + "Email не может быть пустым");
             }
         } catch (ValidationException e) {
@@ -43,20 +43,17 @@ public class UserController {
         if (!userMap.containsKey(user.getId())) {
             log.error("Пользователь с идентефикатором: {} ", user.getId() + " не найден");
             return;
-        }
-        else if (user.getLogin().isBlank()) {
+        } else if (user.getLogin().isBlank()) {
             throw new ValidationException(log + "Логин не может быть пустым");
-        }
-        else if (user.getEmail().isBlank()) {
+        } else if (user.getEmail().isBlank()) {
             throw new ValidationException(log + "Email не может быть пустым");
-        }
-        else if (user.getName().isBlank()) {
+        } else if (user.getName().isBlank()) {
             throw new ValidationException(log + "Имя не может быть пустым");
         }
 
-        log.info("Данные пользователя с идентефикатором и именем {} {} "
-                , user.getId(), user.getName() + " обновлены");
+        log.info("Данные пользователя с идентефикатором и именем {} {} ", user.getId(), user.getName() + " обновлены");
         userMap.put(user.getId(), user);
+
     }
 
     @GetMapping("/{id}")
