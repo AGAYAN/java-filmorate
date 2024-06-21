@@ -27,7 +27,7 @@ class FilmControllerTest {
         Film film = Film.builder()
                 .description("description")
                 .name("1+1")
-                .releaseDate(LocalDate.parse("23.05.2016", formatter))
+                .releaseDate(LocalDate.parse("15.02.2016", formatter))
                 .duration(Duration.ofMinutes(90))
                 .build();
 

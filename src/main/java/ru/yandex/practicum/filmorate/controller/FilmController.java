@@ -17,17 +17,20 @@ import java.util.OptionalLong;
 public class FilmController {
 
     private final Map<Long, Film> filmMap = new HashMap<>();
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
-        if (film.getName() == null || film.getName().isBlank()) {
+        if (film.getName().isBlank()) {
+            log.error("Название не может быть пустым");
             throw new ValidationException("Название не может быть пустым");
-        } else if (film.getDescription() == null || film.getDescription().length() > 200) {
+        } else if (film.getDescription().length() > 200) {
+            log.error("Максимальная длина описания — 200 символов");
             throw new ValidationException("Максимальная длина описания — 200 символов");
-        } else if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(LocalDate.parse("1895-12-28", formatter))) {
+        } else if ((LocalDate.parse("15.02.2016", DateTimeFormatter.ofPattern("dd.MM.yyyy")).isBefore(film.getReleaseDate()))) {
+            log.error("Дата релиза — не раньше 28 декабря 1895 года");
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
-        } else if (film.getDuration() == null || film.getDuration().getSeconds() < 0) {
+        } else if (film.getDuration().getSeconds() < 0) {
+            log.error("Продолжительность не может быть отрицательной");
             throw new ValidationException("Продолжительность не может быть отрицательной");
         }
 

@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalLong;
+import java.util.regex.Pattern;
 
 @RestController
 @Slf4j
@@ -20,10 +23,21 @@ public class UserController {
     public void addNewUser(@RequestBody User user) {
 
         try {
-            if (user.getLogin().isBlank()) {
-                throw new ValidationException(log + "Логин не может быть пустым");
-            } else if (user.getEmail().isBlank()) {
-                throw new ValidationException(log + "Email не может быть пустым");
+            if (user.getEmail().isBlank()) {
+                log.error("Электронная почта не может быть пустой");
+                throw new ValidationException("Электронная почта не может быть пустой");
+            } else if (!Pattern.matches("^[a-zA-Z0-9]+@+[a-z]+.+[a-z]$", user.getEmail())) {
+                log.error("Неверный формат почты");
+                throw new ValidationException("Неверный формат почты");
+            } else if (user.getLogin().isBlank()) {
+                log.error("Логин не может быть пустым");
+                throw new ValidationException("Логин не может быть пустым");
+            } else if (user.getLogin().contains(" ")) {
+                log.error("Логин должен быть без пробелов");
+                throw new ValidationException("Логин должен быть без пробелов");
+            } else if (user.getBirthday().isAfter(LocalDate.now())) {
+                log.error("Дата рождения не может быть в будущем.");
+                throw new ValidationException("Дата рождения не может быть в будущем.");
             }
         } catch (ValidationException e) {
             log.error("Ошибка валидации: {} ", e.getMessage());
@@ -40,15 +54,21 @@ public class UserController {
     @PutMapping
     public void update(@RequestBody User user) throws ValidationException {
 
-        if (!userMap.containsKey(user.getId())) {
-            log.error("Пользователь с идентефикатором: {} ", user.getId() + " не найден");
-            return;
+        if (user.getEmail().isBlank()) {
+            log.error("Электронная почта не может быть пустой");
+            throw new ValidationException("Электронная почта не может быть пустой");
+        } else if (!Pattern.matches("^[a-zA-Z0-9]+@+[a-z]+.+[a-z]$", user.getEmail())) {
+            log.error("Неверный формат почты");
+            throw new ValidationException("Неверный формат почты");
         } else if (user.getLogin().isBlank()) {
-            throw new ValidationException(log + "Логин не может быть пустым");
-        } else if (user.getEmail().isBlank()) {
-            throw new ValidationException(log + "Email не может быть пустым");
-        } else if (user.getName().isBlank()) {
-            throw new ValidationException(log + "Имя не может быть пустым");
+            log.error("Логин не может быть пустым");
+            throw new ValidationException("Логин не может быть пустым");
+        } else if (user.getLogin().contains(" ")) {
+            log.error("Логин должен быть без пробелов");
+            throw new ValidationException("Логин должен быть без пробелов");
+        } else if (user.getBirthday().isAfter(LocalDate.now())) {
+            log.error("Дата рождения не может быть в будущем.");
+            throw new ValidationException("Дата рождения не может быть в будущем.");
         }
 
         log.info("Данные пользователя с идентефикатором и именем {} {} ", user.getId(), user.getName() + " обновлены");
