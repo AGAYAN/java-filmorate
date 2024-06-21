@@ -23,7 +23,7 @@ class UserControllerTest {
     private UserController controller;
 
     @Test
-    public void addNewUser() {
+    public void addNewUser() throws ValidationException {
         User user = User.builder()
                 .login("dsadsa")
                 .email("dasdas@mail.ru")
