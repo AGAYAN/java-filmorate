@@ -12,11 +12,9 @@ public class User {
     private Long id;
 
     @NonNull
-    @EqualsAndHashCode.Include
     private String email;
 
     @NonNull
-    @EqualsAndHashCode.Include
     private String login;
 
     private String name;

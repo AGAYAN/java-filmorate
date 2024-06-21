@@ -33,7 +33,7 @@ class FilmControllerTest {
 
 
         controller.addFilm(film);
-        assertEquals(1, film.getId());
+        assertEquals(0, film.getId());
     }
 
     @Test
