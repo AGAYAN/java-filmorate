@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserControllerTest {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-
     @Autowired
     private UserController controller;
 

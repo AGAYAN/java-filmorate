@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class FilmControllerTest {
+
     @Autowired
     private FilmController controller;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
 
     @Test
     public void addUser() throws ValidationException {

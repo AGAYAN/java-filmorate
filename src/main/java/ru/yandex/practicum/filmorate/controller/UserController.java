@@ -13,6 +13,7 @@ import java.util.OptionalLong;
 @Slf4j
 @RequestMapping("/users")
 public class UserController {
+
     private final Map<Long, User> userMap = new HashMap<>();
     @PostMapping
     public void addNewUser(@RequestBody User user) {
@@ -62,6 +63,7 @@ public class UserController {
     public User getUser(@PathVariable long id) {
         return userMap.get(id);
     }
+
     @GetMapping
     public Map<Long, User> getUsers() {
         return userMap;
@@ -71,6 +73,4 @@ public class UserController {
         OptionalLong maxIdOpt = userMap.keySet().stream().mapToLong(Long::longValue).max();
         return maxIdOpt.orElseGet(() -> 1L);
     }
-
-
 }
