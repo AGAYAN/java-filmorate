@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalLong;
@@ -34,9 +35,8 @@ public class FilmController {
             throw new ValidationException("Продолжительность не может быть отрицательной");
         }
 
-        Long nextId = getFilmId();
-        film.setId(nextId);
-        filmMap.put(nextId, film);
+        film.setId(getFilmId());
+        filmMap.put(film.getId(), film);
 
         log.info("Фильм добавлен: {}", film.getName());
         return film;
@@ -48,7 +48,9 @@ public class FilmController {
     }
 
     @GetMapping
-    public Map<Long, Film> getFilms() {
-        return filmMap;
+    public Collection<Film> allFilms() {
+        log.info("Всего фильмов: {}", filmMap.values().size());
+        return filmMap.values();
     }
+
 }
