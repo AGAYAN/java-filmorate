@@ -44,7 +44,7 @@ public class FilmController {
 
     private Long getFilmId() {
         OptionalLong maxIdOpt = filmMap.keySet().stream().mapToLong(Long::longValue).max();
-        return maxIdOpt.orElse(0L);
+        return maxIdOpt.orElse(0L) + 1;
     }
 
     @GetMapping
