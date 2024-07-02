@@ -7,6 +7,7 @@ import lombok.NonNull;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * Film.
@@ -26,4 +27,6 @@ public class Film {
     private LocalDate releaseDate;
 
     private Duration duration;
+
+    private Set<Long> likes;
 }
