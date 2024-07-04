@@ -61,7 +61,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void addFriend(Long userId, Long friendUserId)  {
+    public void addFriend(Long userId, Long friendUserId) {
         findById(userId).getFriends().add(friendUserId);
         findById(friendUserId).getFriends().add(userId);
     }
@@ -78,7 +78,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public List<Long> getMutualFriends (Long userId,Long friendId) {
+    public List<Long> getMutualFriends(Long userId, Long friendId) {
         Set<Long> friendUser = findById(userId).getFriends();
         Set<Long> friend = findById(friendId).getFriends();
 

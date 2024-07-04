@@ -25,6 +25,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
         return film;
     }
+
     @Override
     public void delete(int id) {
         Film filmToRemove = filmMap.remove(id);
