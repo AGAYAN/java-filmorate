@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,5 +23,9 @@ public class User {
     private String name;
 
     private LocalDate birthday;
+
+    private Set<Long> friends;
+
+    private Set<Long> likedFilms;
 
 }
