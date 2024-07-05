@@ -9,15 +9,13 @@ import java.util.Set;
 public interface UserStorage {
     void add(User user) throws ValidationException;
 
-    void update(User user) throws ValidationException;
+    void update(User user);
 
     void delete(int id);
 
     User findById(Long id);
 
     List<User> findAll();
-
-    void validate(User user) throws ValidationException;
 
     long getNextId();
 

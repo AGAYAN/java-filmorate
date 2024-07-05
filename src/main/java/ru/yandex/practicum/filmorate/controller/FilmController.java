@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -26,17 +26,17 @@ public class FilmController {
     }
 
     @GetMapping
-    public List<Film> getFilms() {
+    public Map<Long, Film> getFilms() {
         return filmService.findAll();
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public void takeLike(@PathVariable("id") Long filmId, @PathVariable Long userId) {
+    public void takeLike(@PathVariable("id") Long filmId, @PathVariable Long userId) throws ValidationException {
         filmService.likeFilm(filmId, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void deleteLike(@PathVariable("id") Long filmId, @PathVariable Long userId) {
+    public void deleteLike(@PathVariable("id") Long filmId, @PathVariable Long userId) throws ValidationException {
         filmService.unlikeFilm(filmId, userId);
     }
 }

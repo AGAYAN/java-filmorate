@@ -1,20 +1,17 @@
 package ru.yandex.practicum.filmorate.storage.filmStorage;
 
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.List;
+import java.util.Map;
 
 public interface FilmStorage {
-    Film add(Film film) throws ValidationException;
+    Film add(Film film);
 
     void delete(int id);
 
     Film findById(Long id);
 
-    List<Film> findAll();
-
-    void validate(Film film) throws ValidationException;
+    Map<Long, Film> findAll();
 
     void likeFilm(Long id, Long userId);
 

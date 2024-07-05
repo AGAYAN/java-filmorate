@@ -2,12 +2,9 @@ package ru.yandex.practicum.filmorate.storage.filmStorage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -15,11 +12,9 @@ import java.util.Map;
 public class InMemoryFilmStorage implements FilmStorage {
 
     private final Map<Long, Film> filmMap = new HashMap<>();
-    private long nextId = 0;
 
     @Override
-    public Film add(Film film) throws ValidationException {
-        validate(film);
+    public Film add(Film film) {
         film.setId(getNextId());
         filmMap.put(getNextId(), film);
 
@@ -40,9 +35,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> findAll() {
+    public Map<Long, Film> findAll() {
         log.info("Всего фильмов: {}", filmMap.values().size());
-        return (List<Film>) filmMap;
+        return filmMap;
     }
 
     @Override
@@ -65,18 +60,12 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 
-    @Override
-    public void validate(Film film) throws ValidationException {
-        if (film.getName().isBlank()) {
-            throw new ValidationException("Название не может быть пустым");
-        } else if (film.getDescription().length() > 200) {
-            throw new ValidationException("Максимальная длина описания — 200 символов");
-        } else if (film.getReleaseDate().isBefore(LocalDate.parse("1895-12-28"))) {
-            throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
-        }
-    }
-
     private long getNextId() {
-        return ++nextId;
+        long currentMaxId = filmMap.keySet()
+                .stream()
+                .mapToLong(id -> id)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
     }
 }

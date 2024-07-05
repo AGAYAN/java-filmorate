@@ -52,17 +52,17 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/friends/{friendsId}")
-    public void deleteFriend(@PathVariable Long userId, Long friendId) {
+    public void deleteFriend(@PathVariable Long userId, Long friendId) throws ValidationException {
         userService.deleteFriend(userId, friendId);
     }
 
     @GetMapping("/{id}/friends")
-    public Set<Long> getAllFriend(@PathVariable Long userId) {
+    public Set<Long> getAllFriend(@PathVariable Long userId) throws ValidationException {
         return userService.allFriend(userId);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<Long> getMutualFriends(@PathVariable("id") Long userId, @PathVariable("otherId") Long friendId) {
+    public List<Long> getMutualFriends(@PathVariable("id") Long userId, @PathVariable("otherId") Long friendId) throws ValidationException {
         return userService.getMutualFriends(userId, friendId);
     }
 }

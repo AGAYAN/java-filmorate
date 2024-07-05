@@ -2,16 +2,13 @@ package ru.yandex.practicum.filmorate.storage.userStorage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.LocalDate;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -21,8 +18,7 @@ public class InMemoryUserStorage implements UserStorage {
     private long nextId = 0;
 
     @Override
-    public void add(User user) throws ValidationException {
-        validate(user);
+    public void add(User user) {
 
         user.setName(user.getLogin());
         user.setId(getNextId());
@@ -50,13 +46,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public long getNextId() {
-        return ++nextId;
-    }
-
-    @Override
-    public void update(User user) throws ValidationException {
-        validate(user);
+    public void update(User user) {
         userMap.put(user.getId(), user);
     }
 
@@ -85,17 +75,13 @@ public class InMemoryUserStorage implements UserStorage {
         return friend.stream().filter(friendUser::contains).toList();
     }
 
-    public void validate(User user) throws ValidationException {
-        if (user.getEmail().isBlank()) {
-            throw new ValidationException("Электронная почта не может быть пустой");
-        } else if (!Pattern.matches("^[a-zA-Z0-9]+@+[a-z]+.+[a-z]$", user.getEmail())) {
-            throw new ValidationException("Неверный формат почты");
-        } else if (user.getLogin().isBlank()) {
-            throw new ValidationException("Логин не может быть пустым");
-        } else if (user.getLogin().contains(" ")) {
-            throw new ValidationException("Логин должен быть без пробелов");
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем");
-        }
+    @Override
+    public long getNextId() {
+        long currentMaxId = userMap.keySet()
+                .stream()
+                .mapToLong(id -> id)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
     }
 }
