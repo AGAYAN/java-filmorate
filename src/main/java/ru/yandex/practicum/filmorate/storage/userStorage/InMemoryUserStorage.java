@@ -13,13 +13,14 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> userMap = new HashMap<>();
 
     @Override
-    public void add(User user) {
+    public User add(User user) {
 
         user.setName(user.getLogin());
         user.setId(getNextId());
         userMap.put(user.getId(), user);
 
         log.info("Пользователь с именем: {} создан", user.getName());
+        return user;
     }
 
     @Override

@@ -24,14 +24,14 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
-    public void add(User user) throws ValidationException {
+    public User add(User user) throws ValidationException {
         validate(user);
 
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
 
-        userStorage.add(user);
+        return userStorage.add(user);
     }
 
     public void update(User user) {

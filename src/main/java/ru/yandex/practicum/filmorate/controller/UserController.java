@@ -22,8 +22,9 @@ public class UserController {
     }
 
     @PostMapping
-    public void addNewUser(@RequestBody User user) {
-        userService.add(user);
+    public User addNewUser(@RequestBody User user) {
+        log.debug("Получен POST-запрос /users с телом {}", user);
+        return userService.add(user);
     }
 
     @PutMapping

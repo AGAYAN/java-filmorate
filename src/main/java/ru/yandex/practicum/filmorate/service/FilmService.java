@@ -50,7 +50,6 @@ public class FilmService {
 
     public Film getFilmByID(Long filmId) {
         checkContains(filmId);
-
         return filmStorage.findById(filmId);
     }
 

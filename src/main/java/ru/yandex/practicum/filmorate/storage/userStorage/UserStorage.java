@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.userStorage;
 
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
@@ -8,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserStorage {
-    void add(User user) throws ValidationException;
+    User add(User user);
 
     void update(User user);
 
