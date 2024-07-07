@@ -4,18 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Long, User> userMap = new HashMap<>();
-    private long nextId = 0;
 
     @Override
     public void add(User user) {
@@ -40,9 +35,9 @@ public class InMemoryUserStorage implements UserStorage {
         return userMap.get(id);
     }
 
-    @Override
-    public List<User> findAll() {
-        return new ArrayList<>(userMap.values());
+    public Collection<User> findAll() {
+        log.info("Всего пользователей: {} ", userMap.values().size());
+        return userMap.values();
     }
 
     @Override

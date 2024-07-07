@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage.userStorage;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -15,11 +16,11 @@ public interface UserStorage {
 
     User findById(Long id);
 
-    List<User> findAll();
+    Collection<User> findAll();
 
     long getNextId();
 
-    void addFriend(Long aLong, Long id) throws ValidationException;
+    void addFriend(Long aLong, Long id);
 
     void deleteFriends(Long userId, Long friendId);
 
