@@ -3,20 +3,16 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.userStorage.UserStorage;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
-public class UserService {
+public class UserService implements UserServiceInterface {
     private final UserStorage userStorage;
 
     @Autowired
@@ -24,8 +20,7 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
-    public User add(User user) throws ValidationException {
-        validate(user);
+    public User add(User user) {
 
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
@@ -34,16 +29,15 @@ public class UserService {
         return userStorage.add(user);
     }
 
-    public void update(User user) {
-        validate(user);
-        userStorage.update(user);
+    public User update(User user) {
+        return userStorage.update(user);
     }
 
-    public void delete(int id) {
-        userStorage.delete(id);
+    public User delete(Long id) {
+        return userStorage.delete(id);
     }
 
-    public User findById(long id) {
+    public User findById(Long id) {
         return userStorage.findById(id);
     }
 
@@ -51,57 +45,33 @@ public class UserService {
         return userStorage.findAll();
     }
 
-    public void addFriends(Long id, Long otherId) {
-        containsUser(id);
-        containsUser(otherId);
-        userStorage.addFriend(id, otherId);
+    public void addFriend(Long userId, Long otherId) {
+        log.info("Adding friend {} to user {} ", otherId, userId);
+        User user = userStorage.findById(userId);
+        User friend = userStorage.findById(otherId);
+
+        user.getFriends().add(otherId);
+        friend.getFriends().add(userId);
     }
 
-    public void deleteFriend(Long userId, Long friendId) {
-        containsUser(userId);
-        containsUser(friendId);
-        userStorage.deleteFriends(userId, friendId);
+    public void deleteFriends(Long userId, Long friendId) {
+        log.info("Adding friend {} to user {} ", friendId, userId);
+        User user = userStorage.findById(userId);
+        User friend = userStorage.findById(friendId);
+
+        user.getFriends().remove(friendId);
+        friend.getFriends().remove(userId);
     }
 
-    public Set<Long> allFriend(Long userId) {
-        containsUser(userId);
-        return userStorage.allFriend(userId);
+    public List<User> allFriend(Long userId) {
+        return findById(userId).getFriends().stream().map(userStorage::findById).toList();
     }
 
-    public List<Long> getMutualFriends(Long userId, Long friendId) {
-        containsUser(userId);
-        containsUser(friendId);
-        return userStorage.getMutualFriends(userId, friendId);
+    public List<User> getMutualFriends(Long userId, Long friendId) {
+        Set<Long> friendUser = findById(userId).getFriends();
+        Set<Long> friend = findById(friendId).getFriends();
+
+        return friend.stream().filter(friendUser::contains).map(userStorage::findById).toList();
     }
 
-    public void validate(User user) throws ValidationException {
-        if (user.getEmail().isBlank()) {
-            log.error("Электронная почта не может быть пустой");
-            throw new ValidationException("Электронная почта не может быть пустой");
-
-        } else if (!Pattern.matches("^[a-zA-Z0-9]+@+[a-z]+.+[a-z]$", user.getEmail())) {
-            log.error("Неверный формат почты");
-            throw new ValidationException("Неверный формат почты");
-
-        } else if (user.getLogin().isBlank()) {
-            log.error("Логин не может быть пустым");
-            throw new ValidationException("Логин не может быть пустым");
-
-        } else if (user.getLogin().contains(" ")) {
-            log.error("Логин должен быть без пробелов");
-            throw new ValidationException("Логин должен быть без пробелов");
-
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Дата рождения не может быть в будущем.");
-            throw new ValidationException("Дата рождения не может быть в будущем.");
-        }
-
-    }
-
-    private void containsUser(Long userId) {
-        if (userStorage.findById(userId) == null) {
-            throw new NotFoundException("Пользователя с id =  " + userId
-                    + " нет в системе");
-        }
-    }
 }
